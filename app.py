@@ -97,5 +97,4 @@ def logout():
     session.pop('username', None)
     return redirect('/')
 
-if __name__ == '__main__':
-    init_db()
+init_db()
