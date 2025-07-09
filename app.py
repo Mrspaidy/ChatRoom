@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, jsonify
 import sqlite3
+import os  # ✅ required for file existence check
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -32,6 +33,10 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+# ✅ Initialize DB only if it doesn't exist
+if not os.path.exists("database.db"):
+    init_db()
 
 @app.route('/')
 def login_page():
@@ -96,5 +101,3 @@ def get_messages():
 def logout():
     session.pop('username', None)
     return redirect('/')
-
-init_db()
