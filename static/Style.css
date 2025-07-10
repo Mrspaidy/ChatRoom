@@ -163,3 +163,23 @@ header {
     cursor: pointer;
     font-weight: bold;
 }
+@media (max-width: 480px) {
+    .login-container {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .login-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .login-container input,
+    .login-container button {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .note {
+        font-size: 0.75rem;
+    }
+}
