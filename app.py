@@ -26,7 +26,7 @@ def init_db():
 
     # Insert default users (only for demo)
     try:
-        c.execute("INSERT INTO users (username, password) VALUES ('spaidy', '123')")
+        c.execute("INSERT INTO users (username, password) VALUES ('user1', 'user2')")
         c.execute("INSERT INTO users (username, password) VALUES ('user2', 'pass2')")
     except sqlite3.IntegrityError:
         pass  # Users already exist
