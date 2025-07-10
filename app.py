@@ -26,8 +26,8 @@ def init_db():
 
     # Insert default users (only for demo)
     try:
-        c.execute("INSERT INTO users (username, password) VALUES ('user1', 'pass1')")
-        c.execute("INSERT INTO users (username, password) VALUES ('user2', 'pass2')")
+        c.execute("INSERT INTO users (username, password) VALUES ('Spaidy', 'dark@ABC')")
+        c.execute("INSERT INTO users (username, password) VALUES ('Agent', 'SYS@123')")
     except sqlite3.IntegrityError:
         pass  # Users already exist
 
@@ -67,7 +67,7 @@ def chat():
 @app.route('/send', methods=['POST'])
 def send_message():
     sender = session['username']
-    receiver = 'user2' if sender == 'user1' else 'user1'
+    receiver = 'Agent' if sender == 'Spaidy' else 'Spaidy'
     message = request.json['message']
 
     conn = sqlite3.connect('database.db')
@@ -81,7 +81,7 @@ def send_message():
 @app.route('/get_messages')
 def get_messages():
     username = session['username']
-    other_user = 'user2' if username == 'user1' else 'user1'
+    other_user = 'Agent' if username == 'Spaidy' else 'Spaidy'
 
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
