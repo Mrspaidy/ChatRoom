@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rubik’s Cube Puzzle</title>
+  <script src="https://cdn.cubing.net/js/cubing/twisty"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0a0a0a;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    /* Spotlight effect */
+    .spotlight {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 80%);
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Cube appearance */
+    twisty-player {
+      width: 400px;
+      height: 400px;
+      filter: grayscale(100%) brightness(0.8);
+      transition: filter 0.3s;
+      z-index: 2;
+    }
+
+    twisty-player:hover {
+      filter: grayscale(0%) brightness(1);
+    }
+
+    /* Secret message */
+    #secret-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      color: #fff;
+      text-shadow: 0 0 20px #fff, 0 0 40px #fff;
+      display: none;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="spotlight"></div>
+
+  <!-- Rubik’s Cube -->
+  <twisty-player id="cube" background="none" experimental-stickering="3D"></twisty-player>
+
+  <!-- Secret message -->
+  <div id="secret-message">🎉 You unlocked the secret message! 🎉</div>
+
+  <script>
+    const cube = document.getElementById("cube");
+    const message = document.getElementById("secret-message");
+
+    // Show message when solved
+    cube.addEventListener("twisty-player-solved", () => {
+      message.style.display = "block";
+    });
+  </script>
+</body>
+</html>
