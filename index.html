@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Rubik’s Cube Puzzle</title>
-  <script src="https://cdn.cubing.net/js/cubing/twisty"></script>
+
+  <!-- Load Cubing.js (Safari needs module) -->
+  <script type="module" src="https://cdn.cubing.net/js/cubing/twisty"></script>
+
   <style>
     body {
       margin: 0;
@@ -15,31 +18,37 @@
       align-items: center;
       height: 100vh;
       color: white;
+      cursor: none; /* Hide default cursor for effect */
     }
 
-    /* Spotlight effect */
+    /* Spotlight that follows mouse */
     .spotlight {
       position: absolute;
-      top: 0;
-      left: 50%;
-      width: 400px;
-      height: 400px;
+      width: 300px;
+      height: 300px;
       background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 80%);
-      transform: translateX(-50%);
+      border-radius: 50%;
       pointer-events: none;
-      z-index: 1;
+      mix-blend-mode: screen;
+      transform: translate(-50%, -50%);
+      z-index: 10;
     }
 
-    /* Cube appearance */
+    /* Cube appearance (always grayscale) */
     twisty-player {
       width: 400px;
       height: 400px;
-      filter: grayscale(100%) brightness(0.8);
+      filter: grayscale(100%) brightness(0.6);
       transition: filter 0.3s;
       z-index: 2;
     }
 
-    twisty-player:hover {
+    /* Area under spotlight shows real colors */
+    body:hover twisty-player {
+      filter: grayscale(100%) brightness(0.6);
+    }
+
+    twisty-player.reveal {
       filter: grayscale(0%) brightness(1);
     }
 
@@ -53,22 +62,48 @@
       color: #fff;
       text-shadow: 0 0 20px #fff, 0 0 40px #fff;
       display: none;
-      z-index: 3;
+      z-index: 20;
     }
   </style>
 </head>
 <body>
-  <div class="spotlight"></div>
+  <!-- Spotlight -->
+  <div class="spotlight" id="spotlight"></div>
 
   <!-- Rubik’s Cube -->
-  <twisty-player id="cube" background="none" experimental-stickering="3D"></twisty-player>
+  <twisty-player
+    id="cube"
+    background="none"
+    camera-controls
+    puzzle="3x3x3"
+  ></twisty-player>
 
   <!-- Secret message -->
   <div id="secret-message">🎉 You unlocked the secret message! 🎉</div>
 
-  <script>
+  <script type="module">
     const cube = document.getElementById("cube");
     const message = document.getElementById("secret-message");
+    const spotlight = document.getElementById("spotlight");
+
+    // Move spotlight with mouse
+    document.addEventListener("mousemove", (e) => {
+      spotlight.style.left = e.pageX + "px";
+      spotlight.style.top = e.pageY + "px";
+
+      // If cursor near cube → reveal colors
+      const rect = cube.getBoundingClientRect();
+      if (
+        e.clientX > rect.left &&
+        e.clientX < rect.right &&
+        e.clientY > rect.top &&
+        e.clientY < rect.bottom
+      ) {
+        cube.classList.add("reveal");
+      } else {
+        cube.classList.remove("reveal");
+      }
+    });
 
     // Show message when solved
     cube.addEventListener("twisty-player-solved", () => {
